@@ -6,7 +6,6 @@ import themes from 'config/themes';
 
 import Menu from 'components/global/Menu';
 import Home from 'views/Home';
-import People from 'views/People';
 import NotFound from 'views/NotFound';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -21,7 +20,6 @@ class App extends Component {
           <div>
             <Switch>
               <Route exact path={ routeCodes.HOME } component={ Home } />
-              <Route path={ routeCodes.PEOPLE } component={ People } />
               <Route path='*' component={ NotFound } />
             </Switch>
           </div>

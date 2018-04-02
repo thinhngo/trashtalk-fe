@@ -1,36 +1,37 @@
 import { Map } from 'immutable';
 
 import {
-  GET_PEOPLE_START,
-  GET_PEOPLE_ERROR,
-  GET_PEOPLE_SUCCESS,
-} from 'actions/people';
+  GET_CLEANUPS_START,
+  GET_CLEANUPS_ERROR,
+  GET_CLEANUPS_SUCCESS
+} from 'actions/cleanups';
 
 const initialState = Map({
   loading: false,
   error: null,
-  people: null,
+  cleanups: null,
+  currentCleanup: null
 });
 
 const actionsMap = {
   // Async action
-  [GET_PEOPLE_START]: (state) => {
+  [GET_CLEANUPS_START]: (state) => {
     return state.merge(Map({
       loading: true,
       error: null,
       people: null,
     }));
   },
-  [GET_PEOPLE_ERROR]: (state, action) => {
+  [GET_CLEANUPS_ERROR]: (state, action) => {
     return state.merge(Map({
       loading: false,
-      error: action.error.message,
+      error: action.error.message
     }));
   },
-  [GET_PEOPLE_SUCCESS]: (state, action) => {
+  [GET_CLEANUPS_SUCCESS]: (state, action) => {
     return state.merge(Map({
       loading: false,
-      people: action.data,
+      people: action.data
     }));
   },
 };

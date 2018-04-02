@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Location from '../models/Location';
+
 /*
 Here is an example of a location object
 const locationObject = {
@@ -21,21 +23,21 @@ const styles = {
   }
 };
 
-const MIDDLE_OF_OAKLAND = {
+const MIDDLE_OF_OAKLAND = new Location({
   lat: 37.804,
   lng: -122.271,
   id: null
-};
+});
 
 export default class GoogleMap extends Component {
   static propTypes = {
     locationArray: PropTypes.array, // Should be an array of location objects
-    currentLocation: PropTypes.object // Should be a location object
+    mapCenter: PropTypes.object // Should be a location object
   }
 
   static defaultProps = {
     locationArray: [],
-    currentLocation: MIDDLE_OF_OAKLAND
+    mapCenter: MIDDLE_OF_OAKLAND
   }
 
   constructor(props) {
@@ -47,10 +49,10 @@ export default class GoogleMap extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.state;
-    const { currentLocation, locationArray } = this.props;
+    const { id } = this.state;jj
+    const { mapCenter, locationArray } = this.props;
 
-    // Initialize Google Map object using currentLocation inside mapContainer
+    // Initialize Google Map object using mapCenter inside mapContainer
     // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
     const mapContainer = document.getElementById(id);
     console.info('element mounted! %o', mapContainer);
@@ -64,10 +66,10 @@ export default class GoogleMap extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Here we should check to see if nextProps.currentLocation has changed.
+    // Here we should check to see if nextProps.mapCenter has changed.
     // If it has, recenter map to new location
-    if(nextProps.currentLocation !== this.props.currentLocation) {
-      // do something
+    if (!nextProps.mapCenter.isAt(this.props.mapCenter)) {
+      // do something to center the map to nextProps.mapCenter
     }
   }
 
