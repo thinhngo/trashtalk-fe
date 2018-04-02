@@ -22,7 +22,7 @@ const styles = {
 const MIDDLE_OF_OAKLAND = {
   lat: 37.804,
   lng: -122.271,
-  html: '<div><h1>Here is Oakland!</h1></div>'
+  id: null
 };
 
 export default class GoogleMap extends Component {
@@ -49,11 +49,11 @@ export default class GoogleMap extends Component {
     const { currentLocation, locationArray } = this.props;
 
     // Initialize Google Map object using currentLocation inside mapContainer
+    // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
     const mapContainer = document.getElementById(id);
     console.info('element mounted! %o', mapContainer);
 
     // For each location in locationArray, add it to the map and add info window if applicable
-    // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
     locationArray.forEach(
       cleanupLocation => {
         console.debug(cleanupLocation);
@@ -64,6 +64,9 @@ export default class GoogleMap extends Component {
   componentWillReceiveProps(nextProps) {
     // Here we should check to see if nextProps.currentLocation has changed.
     // If it has, recenter map to new location
+    if(nextProps.currentLocation !== this.props.currentLocation) {
+      // do something
+    }
   }
 
   render() {
