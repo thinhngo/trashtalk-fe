@@ -1,14 +1,9 @@
-
 import React, { Component } from 'react';
- import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-@connect(state => ({
-  counter: state.app.get('counter'),
-}))
-
 /*
-const location = {
+Here is an example of a location object
+const locationObject = {
   lat: 0, // integer
   lng: 0, // integer
   html: '', // string
@@ -17,7 +12,8 @@ const location = {
 
 export default class GoogleMap extends Component {
   static propTypes = {
-    locationArray: PropTypes.array,
+    locationArray: PropTypes.array, // Should be an array of location objects
+    currentLocation: PropTypes.object, // Should be a location object
   }
 
   constructor(props) {
@@ -27,7 +23,9 @@ export default class GoogleMap extends Component {
   }
 
   componentDidMount() {
+    // Google map would be initialized here
     const { id } = this.state;
+    const { currentLocation } = this.props;
     const reference = document.getElementById(id);
     console.info('ref mounted! %o', reference);
   }
