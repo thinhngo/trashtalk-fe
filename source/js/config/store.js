@@ -55,6 +55,6 @@ export default () => {
   // Return store only
   // But as an object for consistency
   return {
-    store,
+    store
   };
 };
