@@ -19,24 +19,46 @@ const styles = {
   }
 };
 
+const MIDDLE_OF_OAKLAND = {
+  lat: 37.804,
+  lng: -122.271,
+  html: '<div><h1>Here is Oakland!</h1></div>'
+};
+
 export default class GoogleMap extends Component {
   static propTypes = {
     locationArray: PropTypes.array, // Should be an array of location objects
     currentLocation: PropTypes.object // Should be a location object
   }
 
+  static defaultProps = {
+    locationArray: [],
+    currentLocation: MIDDLE_OF_OAKLAND
+  }
+
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      mapObject: null // After we initialize the Google Map object, we can use this variable to point to it
+    };
     this.state.id = Date.now();
   }
 
   componentDidMount() {
-    // Google map would be initialized here
     const { id } = this.state;
-    const { currentLocation } = this.props;
-    const reference = document.getElementById(id);
-    console.info('ref mounted! %o', reference);
+    const { currentLocation, locationArray } = this.props;
+
+    // Initialize Google Map object using currentLocation inside mapContainer
+    const mapContainer = document.getElementById(id);
+    console.info('element mounted! %o', mapContainer);
+
+    // For each location in locationArray, add it to the map and add info window if applicable
+    // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
+    locationArray.forEach(
+      cleanupLocation => {
+        console.debug(cleanupLocation);
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
