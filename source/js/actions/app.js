@@ -1,7 +1,8 @@
-export const INCREMENT = 'INCREMENT';
+export const SET_USER_LOCATION = 'SET_USER_LOCATION';
 
-export function increment() {
+export function setMapCenter(location) {
   return {
-    type: INCREMENT,
+    type: SET_USER_LOCATION,
+    mapCenter: location
   };
 }

@@ -31,8 +31,8 @@ const MIDDLE_OF_OAKLAND = new Location({
 
 export default class GoogleMap extends Component {
   static propTypes = {
-    locationArray: PropTypes.array, // Should be an array of location objects
-    mapCenter: PropTypes.object // Locatino object we use to center the map
+    locationArray: PropTypes.arrayOf(Location),
+    mapCenter: PropTypes.instanceOf(Location)
   }
 
   static defaultProps = {

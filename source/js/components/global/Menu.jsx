@@ -13,6 +13,10 @@ const styles = {
 };
 
 export default class Menu extends Component {
+  onCreateClick = () => {
+
+  }
+
   render() {
     return (
       <AppBar title='Title' position='static'>
@@ -20,7 +24,13 @@ export default class Menu extends Component {
           <Typography variant='title' color='inherit'>
             TrashTalk
           </Typography>
-          <Button variant='raised' color='secondary'> Organize a Cleanup </Button>
+          <Button
+            variant='raised'
+            color='secondary'
+            onClick={ this.onCreateClick }
+          >
+            Organize a Cleanup
+          </Button>
         </Toolbar>
       </AppBar>
     );

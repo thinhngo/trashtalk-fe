@@ -10,7 +10,8 @@ const initialState = Map({
   loading: false,
   error: null,
   cleanups: null,
-  currentCleanup: null
+  currentCleanup: null,
+  userLocation: null
 });
 
 const actionsMap = {
@@ -19,7 +20,7 @@ const actionsMap = {
     return state.merge(Map({
       loading: true,
       error: null,
-      people: null,
+      cleanups: null,
     }));
   },
   [GET_CLEANUPS_ERROR]: (state, action) => {
@@ -31,7 +32,7 @@ const actionsMap = {
   [GET_CLEANUPS_SUCCESS]: (state, action) => {
     return state.merge(Map({
       loading: false,
-      people: action.data
+      cleanups: action.data
     }));
   },
 };

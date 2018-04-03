@@ -1,21 +1,17 @@
 import { Map } from 'immutable';
 
-import {
-  INCREMENT,
-} from 'actions/app';
+import { SET_USER_LOCATION } from 'actions/app';
+
+import Location from 'models/Location';
 
 const initialState = Map({
-  counter: 0,
+  mapCenter: new Location()
 });
 
 const actionsMap = {
-  [INCREMENT]: (state) => {
-    const counter = state.get('counter') + 1;
-
-    return state.merge(Map({
-      counter,
-    }));
-  },
+  [SET_USER_LOCATION]: (state, action) => {
+    return state.set('mapCenter', action.location);
+  }
 };
 
 export default function reducer(state = initialState, action = {}) {
