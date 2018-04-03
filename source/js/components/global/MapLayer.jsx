@@ -4,19 +4,22 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import GoogleMap from '../components/GoogleMap';
+import GoogleMap from '../GoogleMap';
 
 const styles = {
   container: {
-    display: 'flex'
-  },
-  mapContainer: {
+    display: 'flex',
+    position: 'absolute',
+    width: '100%',
     height: '100vh',
-    width: '100%'
+    top: 0,
+    zIndex: -1
   }
 };
 class Home extends Component {
   static propTypes = {
+    mapCenter: PropTypes.instanceOf(Location),
+    children: PropTypes.element
   }
 
   onGetLocationSuccess = (location) => {
@@ -31,10 +34,11 @@ class Home extends Component {
   render() {
     const { mapCenter } = this.props;
     return (
-      <div style={ styles.container }>
-        <div onMouseEnter={ this.getLocation } style={ styles.mapContainer }>
-          <GoogleMap />
-        </div>
+      <div
+        onMouseEnter={ this.getLocation }
+        style={ styles.container }
+      >
+        <GoogleMap />
       </div>
     );
   }
@@ -43,7 +47,7 @@ class Home extends Component {
 // container part
 function mapStateToProps(state) {
   return {
-    mapCenter: state.app
+    mapCenter: state.app.mapCenter
   };
 }
 
