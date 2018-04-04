@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from "react-router-dom";
 import PropTypes from 'prop-types';
 import Stepper, { Step, StepLabel } from 'material-ui/Stepper';
 import Button from 'material-ui/Button';
@@ -10,8 +11,13 @@ import Dialog, {
   DialogTitle,
   withMobileDialog
 } from 'material-ui/Dialog';
+import { routeCodes } from '../constants/routes';
 
 class ResponsiveDialog extends React.Component {
+  static propTypes = {
+    history: PropTypes.object
+  }
+
   state = {
     activeStep: 0,
     open: true
@@ -31,7 +37,11 @@ class ResponsiveDialog extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState(
+      { open: false },
+      // We pause here and wait for the animation to finish before updating browser history
+      () => setTimeout(() => this.props.history.push(routeCodes.HOME), 150)
+    );
   };
 
   handleNext = () => {
@@ -115,4 +125,4 @@ ResponsiveDialog.propTypes = {
   fullScreen: PropTypes.bool.isRequired
 };
 
-export default withMobileDialog()(ResponsiveDialog);
+export default withRouter(withMobileDialog()(ResponsiveDialog));

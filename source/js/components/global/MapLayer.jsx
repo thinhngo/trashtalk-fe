@@ -8,10 +8,9 @@ import GoogleMap from '../GoogleMap';
 
 const styles = {
   container: {
-    display: 'flex',
     position: 'absolute',
     width: '100%',
-    height: '100vh',
+    height: '100%',
     top: 0,
     zIndex: -1
   }
