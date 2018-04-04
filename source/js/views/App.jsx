@@ -19,13 +19,11 @@ class App extends Component {
         <div>
           <Menu />
           <MapLayer />
-          <div>
-            <Switch>
-              <Route exact path={ routeCodes.NEW_CLEANUP } component={ Create } />
-              <Route path={ routeCodes.HOME } />
-              <Route path='*' component={ NotFound } />
-            </Switch>
-          </div>
+          <Switch>
+            <Route exact path={routeCodes.NEW_CLEANUP} component={Create} />
+            <Route path={routeCodes.HOME} />
+            <Route path='*' component={NotFound} />
+          </Switch>
         </div>
       </MuiThemeProvider>
     );
