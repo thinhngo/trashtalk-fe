@@ -13,7 +13,7 @@ const {
 const config = {
   target: 'node',
   watch: !IS_PRODUCTION,
-  devtool: IS_PRODUCTION ? false : 'source-map',
+  devtool: IS_PRODUCTION ? false : 'cheap-module-eval-source-map',
   context: paths.javascript,
   entry: [
     './server.js',

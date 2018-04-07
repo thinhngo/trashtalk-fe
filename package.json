@@ -63,6 +63,8 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
+    "@google/maps": "^0.4.6",
+    "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "express": "^4.16.2",
     "immutable": "^3.8.2",

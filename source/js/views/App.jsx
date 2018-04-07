@@ -15,11 +15,9 @@ import MapLayer from '../components/global/MapLayer';
 class App extends Component {
   render() {
     return (
-      <MuiThemeProvider theme={createMuiTheme(themes.greens2)}>
+      <MuiThemeProvider theme={ createMuiTheme(themes.greens2)} >
         <MapLayer />
-        <div style={ { zIndex: -1 } }>
-          <Menu />
-        </div>
+        <div style={ { zIndex: -1 } }> <Menu /> </div>
         <div style={ { zIndex: 1 } }>
           <Switch>
             <Route exact path={routeCodes.NEW_CLEANUP} component={Create} />

@@ -7,4 +7,15 @@ export default class Cleanup extends Record({
   date: null,
   time: null
 }) {
+  constructor(args) {
+    super(
+      Object.assign(
+        {},
+        {
+          date: new Date()
+        },
+        args
+      )
+    );
+  }
 }

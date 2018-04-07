@@ -1,6 +1,5 @@
 // Simple API wrapper
-
-const API_URL = 'http://localhost:8000';
+const API_URL = 'https://swapi.co/api';
 
 // Custom API error to throw
 function ApiError(message, data, status) {
@@ -26,7 +25,7 @@ function ApiError(message, data, status) {
 }
 
 // API wrapper function
-const fetchResource = (path, userOptions = {}) => {
+export const fetchResource = (path, userOptions = {}) => {
   // Define default options
   const defaultOptions = {};
 
@@ -103,22 +102,4 @@ const fetchResource = (path, userOptions = {}) => {
         throw ApiError(error.toString(), null, 'REQUEST_FAILED');
       }
     });
-};
-
-function getPeople() {
-  return fetchResource('people/');
-}
-
-function getTools() {
-  return fetchResource('api/v1/tools/');
-}
-
-function getToolCategories() {
-  return fetchResource('api/v1/toolcategories/');
-}
-
-export default {
-  getPeople,
-  getTools,
-  getToolCategories
 };

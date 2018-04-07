@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import GoogleMap from '../GoogleMap';
+import { getCleanups } from '../../actions/cleanups';
 
 const styles = {
   container: {
@@ -17,8 +18,13 @@ const styles = {
 };
 class Home extends Component {
   static propTypes = {
+    getCleanups: PropTypes.func,
     mapCenter: PropTypes.instanceOf(Location),
     children: PropTypes.element
+  }
+
+  componentWillMount() {
+    this.props.getCleanups();
   }
 
   onGetLocationSuccess = (location) => {
@@ -52,6 +58,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    getCleanups
   }, dispatch);
 }
 

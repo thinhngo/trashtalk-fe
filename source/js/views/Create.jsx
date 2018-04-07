@@ -1,5 +1,7 @@
 import React from 'react';
-import { withRouter } from "react-router-dom";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Stepper, { Step, StepLabel } from 'material-ui/Stepper';
 import Button from 'material-ui/Button';
@@ -13,20 +15,28 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import { routeCodes } from '../constants/routes';
 
+import LocationSelection from './Create/LocationSelection';
+
+import Cleanup from '../models/Cleanup';
+
 class ResponsiveDialog extends React.Component {
   static propTypes = {
     history: PropTypes.object
   }
 
-  state = {
-    activeStep: 0,
-    open: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeStep: 0,
+      cleanup: new Cleanup(),
+      open: true
+    };
+  }
 
   getStepContent = (step) => {
     switch (step) {
       case 0:
-        return 'Step 1: Cleanup Location';
+        return <LocationSelection />;
       case 1:
         return 'Step 2: Tools Required';
       case 2:
@@ -36,11 +46,16 @@ class ResponsiveDialog extends React.Component {
     }
   }
 
+  setLocation = (cleanup) => {
+    this.setState({cleanup: cleanup});
+  }
+
   handleClose = () => {
+    // The fadeout transition takes a little while, so pause temporarily to
+    // allow animation to finish before actual browser history push
     this.setState(
       { open: false },
-      // We pause here and wait for the animation to finish before updating browser history
-      () => setTimeout(() => this.props.history.push(routeCodes.HOME), 150)
+      () => setTimeout(() => this.props.history.push(routeCodes.HOME), 225)
     );
   };
 
@@ -58,7 +73,7 @@ class ResponsiveDialog extends React.Component {
     });
   };
 
-  steps = ['Where is the location?', 'What tools are required?', 'Summary']
+  steps = ['Location', 'Tools', 'Confirmation']
 
   render() {
     const { fullScreen } = this.props;
@@ -125,4 +140,18 @@ ResponsiveDialog.propTypes = {
   fullScreen: PropTypes.bool.isRequired
 };
 
-export default withRouter(withMobileDialog()(ResponsiveDialog));
+function mapStateToProps(state) {
+  return {
+    mapCenter: state.app.mapCenter
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+  }, dispatch);
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(withMobileDialog()(ResponsiveDialog)));
