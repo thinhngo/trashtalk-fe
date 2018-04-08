@@ -11,7 +11,7 @@ import Dialog, {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  withMobileDialog
+  withMobileDialog,
 } from 'material-ui/Dialog';
 import { routeCodes } from '../constants/routes';
 
@@ -19,9 +19,14 @@ import LocationSelection from './Create/LocationSelection';
 
 import Cleanup from '../models/Cleanup';
 
+@connect(
+  state => ({ mapCenter: state.app.mapCenter }),
+  dispatch => bindActionCreators({}, dispatch)
+)
 class ResponsiveDialog extends React.Component {
   static propTypes = {
-    history: PropTypes.object
+    fullScreen: PropTypes.bool.isRequired,
+    history: PropTypes.object,
   }
 
   constructor(props) {
@@ -100,7 +105,7 @@ class ResponsiveDialog extends React.Component {
               );
             })}
           </Stepper>
-          <div>
+          <DialogContent>
             {this.state.activeStep === this.steps.length ? (
               <div>
                 <Typography >
@@ -110,7 +115,7 @@ class ResponsiveDialog extends React.Component {
               </div>
           ) : (
             <div>
-              <Typography>{ this.getStepContent(activeStep) }</Typography>
+              { this.getStepContent(activeStep) }
               <DialogActions>
                 <Button
                   disabled={ activeStep === 0 }
@@ -124,7 +129,7 @@ class ResponsiveDialog extends React.Component {
               </DialogActions>
             </div>
           )}
-          </div>
+          </DialogContent>
         </DialogContent>
         <DialogActions>
           <Button onClick={ this.handleClose } color='primary'>
@@ -136,22 +141,4 @@ class ResponsiveDialog extends React.Component {
   }
 }
 
-ResponsiveDialog.propTypes = {
-  fullScreen: PropTypes.bool.isRequired
-};
-
-function mapStateToProps(state) {
-  return {
-    mapCenter: state.app.mapCenter
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-  }, dispatch);
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(withMobileDialog()(ResponsiveDialog)));
+export default withRouter(withMobileDialog()(ResponsiveDialog));

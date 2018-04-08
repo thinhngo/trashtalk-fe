@@ -20,7 +20,7 @@ const actionsMap = {
     return state.merge(Map({
       loading: true,
       error: null,
-      cleanups: null,
+      cleanups: null
     }));
   },
   [GET_CLEANUPS_ERROR]: (state, action) => {

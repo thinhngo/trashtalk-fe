@@ -32,12 +32,12 @@ const MIDDLE_OF_OAKLAND = new Location({
 
 export default class GoogleMap extends Component {
   static propTypes = {
-    locationArray: PropTypes.arrayOf(Location),
+    locations: PropTypes.arrayOf(Location),
     mapCenter: PropTypes.instanceOf(Location)
   }
 
   static defaultProps = {
-    locationArray: [],
+    locations: [],
     mapCenter: MIDDLE_OF_OAKLAND
   }
 
@@ -49,21 +49,23 @@ export default class GoogleMap extends Component {
     this.state.id = Date.now();
   }
 
-  componentDidMount() {
+  componentDidMount__() {
     const { id } = this.state;
-    const { mapCenter, locationArray } = this.props;
+    const { mapCenter, locations } = this.props;
 
     // Initialize Google Map object using mapCenter inside mapContainer
     // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
-    const mapContainer = document.getElementById(id);
+    const uluru = { lat: mapCenter.lat, lng: mapCenter.lng };
     const map = new google.maps.Map(document.getElementById(id), {
-      zoom: 15,
+      zoom: 17,
       center: uluru
     });
 
-    const marker = new google.maps.Marker({
-      position: { lat: mapCenter.lat, lng: mapCenter.lng },
-      map: map
+    locations.forEach(location => {
+      const marker = new google.maps.Marker({
+        position: { lat: location.lat, lng: location.lng },
+        map
+      });
     });
   }
 

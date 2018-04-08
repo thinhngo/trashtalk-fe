@@ -82,14 +82,11 @@ class LocationSelection extends Component {
 }
 
 // container part
-function mapStateToProps(state) {
-  return {};
-}
+const mapStateToProps = state => ({
+});
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-  }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({
+}, dispatch);
 
 export default connect(
   mapStateToProps,

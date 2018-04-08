@@ -105,8 +105,8 @@ const fetchResource = (path, userOptions = {}) => {
     });
 };
 
-function getPeople() {
-  return fetchResource('people/');
+function getCleanups() {
+  return fetchResource('/api/v1/cleanups/');
 }
 
 function getTools() {
@@ -118,7 +118,7 @@ function getToolCategories() {
 }
 
 export default {
-  getPeople,
+  getCleanups,
   getTools,
-  getToolCategories
+  getToolCategories,
 };
