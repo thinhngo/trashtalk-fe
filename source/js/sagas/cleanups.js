@@ -12,21 +12,19 @@ import api from 'api';
 
 // -------- Get people
 
-function createGetCleanups() {
-  return function* () { // eslint-disable-line consistent-return
-    try {
-      const data = yield call(() => api.getCleanups());
-      const action = { type: GET_CLEANUPS_SUCCESS, data };
-      yield put(action);
-    } catch (error) {
-      const action = { type: GET_CLEANUPS_ERROR, error };
-      yield put(action);
-    }
-  };
+function* getCleanupsStart() {
+  try {
+    const data = yield call(() => api.getCleanups());
+    const action = { type: GET_CLEANUPS_SUCCESS, data };
+    yield put(action);
+  } catch (error) {
+    const action = { type: GET_CLEANUPS_ERROR, error };
+    yield put(action);
+  }
 }
 
 export function* getCleanupsWatcher() {
-  yield takeEvery(GET_CLEANUPS_START, createGetCleanups());
+  yield takeLatest(GET_CLEANUPS_START, getCleanupsStart);
 }
 
 // export function* getToolCategoriesWatcher() {
@@ -37,8 +35,8 @@ export function* getCleanupsWatcher() {
 //   yield takeEvery(GET_TOOLS_START, getTools);
 // }
 
-export default {
-  getCleanupsWatcher,
+export default [
+  getCleanupsWatcher(),
   // getToolCategoriesWatcher,
   // getToolsWatcher,
-};
+];

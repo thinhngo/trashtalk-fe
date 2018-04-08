@@ -1,3 +1,4 @@
+import * as Immutable from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -20,61 +21,92 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    width: '100%'
-  }
+    width: '100%',
+  },
 };
 
 const MIDDLE_OF_OAKLAND = new Location({
   lat: 37.804,
   lng: -122.271,
-  id: null
+  id: null,
 });
 
 export default class GoogleMap extends Component {
   static propTypes = {
     locations: PropTypes.arrayOf(Location),
-    mapCenter: PropTypes.instanceOf(Location)
+    mapCenter: PropTypes.instanceOf(Location),
   }
 
   static defaultProps = {
     locations: [],
-    mapCenter: MIDDLE_OF_OAKLAND
+    mapCenter: MIDDLE_OF_OAKLAND,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      mapObject: null // After we initialize the Google Map object, we can use this variable to point to it
-    };
-    this.state.id = Date.now();
+  state = {
+    id: Date.now(),
+    locationsMarked: Immutable.Set(),
+    mapReference: null, // After we initialize the Google Map object, we can use this variable to point to it
   }
 
-  componentDidMount__() {
+  /**
+   * After this component is mounted, initialize the Google Map object and point it
+   * to this element. We'll also save a reference to the Map object so that it can be
+   * used elsewhere, e.g.: in this.markLocations()
+   */
+  componentDidMount() {
     const { id } = this.state;
-    const { mapCenter, locations } = this.props;
+    const { locations, mapCenter } = this.props;
 
     // Initialize Google Map object using mapCenter inside mapContainer
     // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
-    const uluru = { lat: mapCenter.lat, lng: mapCenter.lng };
-    const map = new google.maps.Map(document.getElementById(id), {
+    const mapReference = new google.maps.Map(document.getElementById(id), {
       zoom: 17,
-      center: uluru
+      center: { lat: mapCenter.latitude, lng: mapCenter.longitude },
     });
 
-    locations.forEach(location => {
-      const marker = new google.maps.Marker({
-        position: { lat: location.lat, lng: location.lng },
-        map
-      });
+    const marker = new google.maps.Marker({
+      position: { lat: location.latitude, lng: location.longitude },
+      mapReference,
     });
+
+    window.mapReference = mapReference;
+
+    this.setState(
+      { mapReference },
+      () => this.markLocations(locations) // After we set the map reference, mark locations
+    );
   }
 
   componentWillReceiveProps(nextProps) {
     // Here we should check to see if nextProps.mapCenter has changed.
     // If it has, recenter map to new location
     if (!nextProps.mapCenter.isAt(this.props.mapCenter)) {
+      const { mapReference } = this.state;
       // do something to center the map to nextProps.mapCenter
+      console.debug(mapReference);
     }
+
+    // If the array of locations have changed, markLocations again
+    this.markLocations(nextProps.locations);
+  }
+
+  /**
+   * Given an array of locations, mark them on the rendered map
+   * https://developers.google.com/maps/documentation/javascript/examples/marker-simple
+   */
+  markLocations = (locations) => {
+    const { locationsMarked, mapReference } = this.state;
+    locations.forEach(location => {
+      if (mapReference != null && !locationsMarked.has(location)) {
+        const marker = new google.maps.Marker({
+          position: { lat: location.latitude, lng: location.longitude },
+          map: mapReference,
+        });
+        this.setState({
+          locationsMarked: locationsMarked.add(location),
+        });
+      }
+    });
   }
 
   render() {

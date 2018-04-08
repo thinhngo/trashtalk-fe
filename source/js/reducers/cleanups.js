@@ -6,12 +6,15 @@ import {
   GET_CLEANUPS_SUCCESS
 } from 'actions/cleanups';
 
+import Cleanup from 'models/Cleanup';
+import Location from 'models/Location';
+
 const initialState = Map({
   loading: false,
   error: null,
-  cleanups: null,
+  cleanups: [],
   currentCleanup: null,
-  userLocation: null
+  userLocation: new Location(),
 });
 
 const actionsMap = {
@@ -20,7 +23,6 @@ const actionsMap = {
     return state.merge(Map({
       loading: true,
       error: null,
-      cleanups: null
     }));
   },
   [GET_CLEANUPS_ERROR]: (state, action) => {
@@ -30,9 +32,16 @@ const actionsMap = {
     }));
   },
   [GET_CLEANUPS_SUCCESS]: (state, action) => {
+    const parsedCleanups = action.data.map(
+      rawCleanupObject => new Cleanup({
+        ...rawCleanupObject,
+        ...{ location: new Location(rawCleanupObject.location) },
+      })
+    );
+
     return state.merge(Map({
       loading: false,
-      cleanups: action.data
+      cleanups: parsedCleanups,
     }));
   },
 };

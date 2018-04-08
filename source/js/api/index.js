@@ -106,7 +106,7 @@ const fetchResource = (path, userOptions = {}) => {
 };
 
 function getCleanups() {
-  return fetchResource('/api/v1/cleanups/');
+  return fetchResource('api/v1/cleanups/');
 }
 
 function getTools() {

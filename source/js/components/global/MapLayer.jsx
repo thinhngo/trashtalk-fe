@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 
 import GoogleMap from '../GoogleMap';
-import { getCleanups } from '../../actions/cleanups';
+import { getCleanups } from 'actions/cleanups';
+
+import Cleanup from 'models/Cleanup';
 
 const styles = {
   container: {
@@ -19,13 +21,21 @@ const styles = {
 
 
 @connect(
-  state => ({ mapCenter: state.app.mapCenter }),
+  state => ({
+    cleanups: state.cleanups.get('cleanups'),
+    mapCenter: state.app.mapCenter,
+  }),
   dispatch => bindActionCreators({ getCleanups }, dispatch)
 )
 export default class Home extends Component {
   static propTypes = {
+    cleanups: PropTypes.arrayOf(Cleanup),
     getCleanups: PropTypes.func,
     mapCenter: PropTypes.instanceOf(Location),
+  }
+
+  static defaultProps = {
+    cleanups: [],
   }
 
   componentWillMount() {
@@ -42,13 +52,18 @@ export default class Home extends Component {
   }
 
   render() {
-    const { mapCenter } = this.props;
+    const { cleanups, mapCenter } = this.props;
+    const cleanupLocations = cleanups.map(cleanup => cleanup.location);
+    console.debug(cleanupLocations);
     return (
       <div
         onMouseEnter={ this.getLocation }
         style={ styles.container }
       >
-        <GoogleMap mapCenter={ mapCenter } />
+        <GoogleMap
+          locations={ cleanupLocations }
+          mapCenter={ mapCenter }
+        />
       </div>
     );
   }

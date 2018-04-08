@@ -1,24 +1,33 @@
 import { Record } from 'immutable';
 
 export const MIDDLE_OF_OAKLAND = {
-  lat: 37.804,
-  lng: -122.271,
+  latitude: 37.804,
+  longitude: -122.271,
 };
 
 export default class Location extends Record({
   id: undefined,
-  lat: 0.0,
-  lng: 0.0
+  latitude: 0.0,
+  longitude: 0.0,
 }) {
   constructor(args) {
     // Initialize using args or default to MIDDLE_OF_OAKLAND
-    super(Object.assign({}, MIDDLE_OF_OAKLAND, args));
+    const parsedLatLong = args && args.latitude && args.longitude ? {
+      latitude: parseFloat(args.latitude),
+      longitude: parseFloat(args.longitude),
+    } : {};
+
+    super({
+      ...MIDDLE_OF_OAKLAND,
+      ...{ id: args ? args.id : null },
+      ...parsedLatLong,
+    });
   }
 
   isAt(otherLocation) {
     // Method to determine if one location is at the same location as another.
     // We may decide to refine this logic at some point to consider two locations to be the
     // same if they're within a certain distance from one another.
-    return this.lat === otherLocation.lat && this.lng === otherLocation.lng;
+    return this.latitutde === otherLocation.latitude && this.longitude === otherLocation.longitude;
   }
 }

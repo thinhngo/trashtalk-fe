@@ -9,7 +9,11 @@ const styles = {
 /**
  * Template for creating connected components
  */
-class ConnectedComponent extends Component {
+@connect(
+  state => ({}),
+  dispatch => bindActionCreators({}, dispatch)
+)
+export default class ConnectedComponent extends Component {
   static propTypes = {
   }
 
@@ -22,18 +26,3 @@ class ConnectedComponent extends Component {
     );
   }
 }
-
-// container part
-function mapStateToProps(state) {
-  return {};
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-  }, dispatch);
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ConnectedComponent);
