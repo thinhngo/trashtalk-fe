@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+
 import Location from '../models/Location';
 
 /*
@@ -15,7 +16,7 @@ const locationObject = {
 const styles = {
   container: {
     display: 'flex',
-    backgroundColor: '#dcedc8',
+    backgroundColor: 'rgb(228, 226, 222)',
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
@@ -55,14 +56,15 @@ export default class GoogleMap extends Component {
     // Initialize Google Map object using mapCenter inside mapContainer
     // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
     const mapContainer = document.getElementById(id);
-    console.info('element mounted! %o', mapContainer);
+    const map = new google.maps.Map(document.getElementById(id), {
+      zoom: 15,
+      center: uluru
+    });
 
-    // For each location in locationArray, add it to the map and add info window if applicable
-    locationArray.forEach(
-      cleanupLocation => {
-        console.debug(cleanupLocation);
-      }
-    );
+    const marker = new google.maps.Marker({
+      position: { lat: mapCenter.lat, lng: mapCenter.lng },
+      map: map
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,13 +76,9 @@ export default class GoogleMap extends Component {
   }
 
   render() {
-    const { locationArray } = this.props;
     const { id } = this.state;
     return (
-      <div id={ id } style={ styles.container } >
-        <h1>Google Map Placeholder</h1>
-        { (locationArray || []).map((location) => location) }
-      </div>
+      <div id={ id } style={ styles.container } />
     );
   }
 }

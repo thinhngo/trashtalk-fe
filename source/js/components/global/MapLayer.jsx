@@ -16,15 +16,23 @@ const styles = {
     zIndex: -1
   }
 };
-class Home extends Component {
+
+
+@connect(state => ({
+  mapCenter: state.app.mapCenter
+}))
+export default class Home extends Component {
   static propTypes = {
     getCleanups: PropTypes.func,
+    dispatch: PropTypes.func,
     mapCenter: PropTypes.instanceOf(Location),
     children: PropTypes.element
   }
 
   componentWillMount() {
-    this.props.getCleanups();
+    this.props.dispatch(
+      getCleanups()
+    );
   }
 
   onGetLocationSuccess = (location) => {
@@ -48,22 +56,3 @@ class Home extends Component {
     );
   }
 }
-
-// container part
-function mapStateToProps(state) {
-  return {
-    mapCenter: state.app.mapCenter
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    getCleanups
-  }, dispatch);
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
-
