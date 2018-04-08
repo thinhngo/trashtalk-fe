@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 
 import GoogleMap from '../GoogleMap';
 import { getCleanups } from 'actions/cleanups';
+import { setMapReference } from 'actions/app';
 
 import Cleanup from 'models/Cleanup';
 
@@ -25,7 +26,7 @@ const styles = {
     cleanups: state.cleanups.get('cleanups'),
     mapCenter: state.app.mapCenter,
   }),
-  dispatch => bindActionCreators({ getCleanups }, dispatch)
+  dispatch => bindActionCreators({ getCleanups, setMapReference }, dispatch)
 )
 export default class Home extends Component {
   static propTypes = {
@@ -63,6 +64,7 @@ export default class Home extends Component {
         <GoogleMap
           locations={ cleanupLocations }
           mapCenter={ mapCenter }
+          setMapReference={ this.props.setMapReference }
         />
       </div>
     );

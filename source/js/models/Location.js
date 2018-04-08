@@ -24,10 +24,22 @@ export default class Location extends Record({
     });
   }
 
+  /**
+   * Method to determine if one location is at the same location as another.
+   * We may decide to refine this logic at some point to consider two locations to be the
+   * same if they're within a certain distance from one another.
+   */
   isAt(otherLocation) {
-    // Method to determine if one location is at the same location as another.
-    // We may decide to refine this logic at some point to consider two locations to be the
-    // same if they're within a certain distance from one another.
     return this.latitutde === otherLocation.latitude && this.longitude === otherLocation.longitude;
+  }
+
+  /**
+   * Helper method to get an object with lat and lng, used by Google Maps API
+   */
+  getLatLngObj() {
+    return {
+      lat: this.latitude,
+      lng: this.longitude,
+    };
   }
 }

@@ -35,6 +35,7 @@ export default class GoogleMap extends Component {
   static propTypes = {
     locations: PropTypes.arrayOf(Location),
     mapCenter: PropTypes.instanceOf(Location),
+    setMapReference: PropTypes.func,
   }
 
   static defaultProps = {
@@ -55,7 +56,7 @@ export default class GoogleMap extends Component {
    */
   componentDidMount() {
     const { id } = this.state;
-    const { locations, mapCenter } = this.props;
+    const { locations, mapCenter, setMapReference } = this.props;
 
     // Initialize Google Map object using mapCenter inside mapContainer
     // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
@@ -73,8 +74,15 @@ export default class GoogleMap extends Component {
 
     this.setState(
       { mapReference },
-      () => this.markLocations(locations) // After we set the map reference, mark locations
+      () => {
+        this.markLocations(locations); // After we set the map reference, mark locations
+
+        if (setMapReference) {
+          setMapReference(mapReference);
+        }
+      }
     );
+
   }
 
   componentWillReceiveProps(nextProps) {
