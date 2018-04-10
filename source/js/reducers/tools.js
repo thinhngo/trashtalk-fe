@@ -15,8 +15,8 @@ import Tool from 'models/Tool';
 const initialState = Map({
   loading: false,
   error: null,
-  tools: {},
-  toolCategories: {},
+  tools: Map(),
+  toolCategories: Map(),
 });
 
 const actionsMap = {
@@ -34,10 +34,16 @@ const actionsMap = {
     }));
   },
   [GET_TOOLS_SUCCESS]: (state, action) => {
-    console.debug('GET_TOOLS_SUCCESS');
     return state.merge(Map({
       loading: false,
-      tools: action.data.map(o => new Tool(o)),
+      tools: action.data.reduce(
+        (prev, curr) => Object.assign(
+          {},
+          prev,
+          { [curr.id]: new Tool(curr) }
+        ),
+        {}
+      ),
     }));
   },
   // Async action
@@ -56,7 +62,15 @@ const actionsMap = {
   [GET_TOOL_CATEGORIES_SUCCESS]: (state, action) => {
     return state.merge(Map({
       loading: false,
-      toolCategories: action.data.map(o => new ToolCategory(o)),
+      toolCategories: action.data.reduce(
+        (prev, curr) => Object.assign(
+          {},
+          prev,
+          { [curr.id]: new ToolCategory(curr) }
+        ),
+        {}
+      ),
+
     }));
   },
 };
