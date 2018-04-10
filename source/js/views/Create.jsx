@@ -18,7 +18,7 @@ import { routeCodes } from '../constants/routes';
 
 import DateSelection from './Create/DateSelection';
 import LocationSelection from './Create/LocationSelection';
-import ToolSelection from './Create/ToolSelection';
+import ToolsSelector from './Create/ToolsSelector';
 
 import Cleanup from '../models/Cleanup';
 
@@ -129,7 +129,7 @@ class Create extends React.Component {
     const stepMapping = {
       [LOCATION_SELECTION]: <LocationSelection { ...commonProps } />,
       [DATE_SELECTION]: <DateSelection { ...commonProps } />,
-      [TOOL_SELECTION]: <ToolSelection { ...commonProps } />,
+      [TOOL_SELECTION]: <ToolsSelector { ...commonProps } />,
       [SUMMARY]: 'Step 4: Summary',
     };
 

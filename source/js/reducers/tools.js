@@ -17,6 +17,7 @@ const initialState = Map({
   error: null,
   tools: Map(),
   toolCategories: Map(),
+  categoryToToolMap: Map(),
 });
 
 const actionsMap = {
@@ -34,16 +35,21 @@ const actionsMap = {
     }));
   },
   [GET_TOOLS_SUCCESS]: (state, action) => {
+    const tools = {};
+    const categoryToToolMap = {};
+    action.data.forEach(tool => {
+      tools[tool.id] = new Tool(tool);
+      const currentCategory = (
+        categoryToToolMap[tool.category] || []
+      );
+      currentCategory.push(tool.id);
+      categoryToToolMap[tool.category] = currentCategory;
+    });
+
     return state.merge(Map({
       loading: false,
-      tools: action.data.reduce(
-        (prev, curr) => Object.assign(
-          {},
-          prev,
-          { [curr.id]: new Tool(curr) }
-        ),
-        {}
-      ),
+      tools,
+      categoryToToolMap,
     }));
   },
   // Async action
@@ -70,7 +76,6 @@ const actionsMap = {
         ),
         {}
       ),
-
     }));
   },
 };

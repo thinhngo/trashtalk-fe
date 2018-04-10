@@ -6,6 +6,7 @@ export default class Cleanup extends Record({
   organizer: null,
   startTime: null,
   endTime: null,
+  toolSelections: [],
 }) {
   timesAreValid() {
     return (
