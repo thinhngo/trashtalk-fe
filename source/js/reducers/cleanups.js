@@ -3,7 +3,7 @@ import { Map } from 'immutable';
 import {
   GET_CLEANUPS_START,
   GET_CLEANUPS_ERROR,
-  GET_CLEANUPS_SUCCESS
+  GET_CLEANUPS_SUCCESS,
 } from 'actions/cleanups';
 
 import Cleanup from 'models/Cleanup';
@@ -28,7 +28,7 @@ const actionsMap = {
   [GET_CLEANUPS_ERROR]: (state, action) => {
     return state.merge(Map({
       loading: false,
-      error: action.error.message
+      error: action.error.message,
     }));
   },
   [GET_CLEANUPS_SUCCESS]: (state, action) => {

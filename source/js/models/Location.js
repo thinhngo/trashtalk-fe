@@ -30,7 +30,7 @@ export default class Location extends Record({
    * same if they're within a certain distance from one another.
    */
   isAt(otherLocation) {
-    return this.latitutde === otherLocation.latitude && this.longitude === otherLocation.longitude;
+    return this.latitude === otherLocation.latitude && this.longitude === otherLocation.longitude;
   }
 
   /**

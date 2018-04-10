@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Stepper, { Step, StepLabel } from 'material-ui/Stepper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -18,6 +19,13 @@ import { routeCodes } from '../constants/routes';
 import LocationSelection from './Create/LocationSelection';
 
 import Cleanup from '../models/Cleanup';
+
+const styles = {
+  stepStyle: {
+    width: '100vw',
+    maxWidth: '100%',
+  },
+};
 
 @connect(
   state => ({ mapCenter: state.app.mapCenter }),
@@ -34,14 +42,21 @@ class ResponsiveDialog extends React.Component {
     this.state = {
       activeStep: 0,
       cleanup: new Cleanup(),
-      open: true
+      open: true,
     };
   }
 
   getStepContent = (step) => {
+    const { cleanup } = this.state;
+
+    const commonProps = {
+      cleanup,
+      setCleanup: this.setCleanup,
+    };
+
     switch (step) {
       case 0:
-        return <LocationSelection />;
+        return <LocationSelection { ...commonProps } />;
       case 1:
         return 'Step 2: Tools Required';
       case 2:
@@ -51,9 +66,7 @@ class ResponsiveDialog extends React.Component {
     }
   }
 
-  setLocation = (cleanup) => {
-    this.setState({cleanup: cleanup});
-  }
+  setCleanup = (cleanup) => this.setState({ cleanup })
 
   handleClose = () => {
     // The fadeout transition takes a little while, so pause temporarily to
@@ -67,14 +80,14 @@ class ResponsiveDialog extends React.Component {
   handleNext = () => {
     const { activeStep } = this.state;
     this.setState({
-      activeStep: activeStep + 1
+      activeStep: activeStep + 1,
     });
   };
 
   handleBack = () => {
     const { activeStep } = this.state;
     this.setState({
-      activeStep: activeStep - 1
+      activeStep: activeStep - 1,
     });
   };
 
@@ -96,7 +109,10 @@ class ResponsiveDialog extends React.Component {
           <DialogContentText>
             Organize a new cleanup!
           </DialogContentText>
-          <Stepper activeStep={ activeStep } alternativeLabel>
+          <Stepper
+            activeStep={ activeStep }
+            alternativeLabel
+          >
             {this.steps.map(label => {
               return (
                 <Step key={ label }>
@@ -105,17 +121,16 @@ class ResponsiveDialog extends React.Component {
               );
             })}
           </Stepper>
-          <DialogContent>
-            {this.state.activeStep === this.steps.length ? (
-              <div>
-                <Typography >
-                  All steps completed - you&quot;re finished
-                </Typography>
-                <Button onClick={ this.handleReset }>Reset</Button>
-              </div>
-          ) : (
+          {this.state.activeStep === this.steps.length ? (
             <div>
-              { this.getStepContent(activeStep) }
+              <Typography >
+                All steps completed - you&quot;re finished
+              </Typography>
+              <Button onClick={ this.handleReset }>Reset</Button>
+            </div>
+          ) : (
+            <div style={ styles.stepStyle } >
+              {this.getStepContent(activeStep)}
               <DialogActions>
                 <Button
                   disabled={ activeStep === 0 }
@@ -123,13 +138,16 @@ class ResponsiveDialog extends React.Component {
                 >
                   Back
                 </Button>
-                <Button variant='raised' color='secondary' onClick={ this.handleNext }>
+                <Button
+                  variant='raised'
+                  color='secondary'
+                  onClick={ this.handleNext }
+                >
                   {activeStep === this.steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
               </DialogActions>
             </div>
           )}
-          </DialogContent>
         </DialogContent>
         <DialogActions>
           <Button onClick={ this.handleClose } color='primary'>
