@@ -9,6 +9,7 @@ export default class Location extends Record({
   id: undefined,
   latitude: 0.0,
   longitude: 0.0,
+  name: '',
 }) {
   constructor(args) {
     // Initialize using args or default to MIDDLE_OF_OAKLAND
@@ -19,7 +20,7 @@ export default class Location extends Record({
 
     super({
       ...MIDDLE_OF_OAKLAND,
-      ...{ id: args ? args.id : null },
+      ...args,
       ...parsedLatLong,
     });
   }

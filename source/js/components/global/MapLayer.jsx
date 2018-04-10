@@ -20,7 +20,6 @@ const styles = {
   },
 };
 
-
 @connect(
   state => ({
     cleanups: state.cleanups.get('cleanups'),
@@ -52,7 +51,6 @@ export default class Home extends Component {
   render() {
     const { cleanups, mapCenter } = this.props;
     const cleanupLocations = cleanups.map(cleanup => cleanup.location);
-    console.debug('cleanupLocations %o', cleanupLocations);
     return (
       <div
         onMouseEnter={ this.getLocation }

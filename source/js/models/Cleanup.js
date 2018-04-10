@@ -5,17 +5,6 @@ export default class Cleanup extends Record({
   location: null,
   organizer: null,
   date: null,
-  time: null
+  time: null,
 }) {
-  constructor(args) {
-    super(
-      Object.assign(
-        {},
-        {
-          date: new Date()
-        },
-        args
-      )
-    );
-  }
 }

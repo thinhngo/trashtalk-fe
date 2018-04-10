@@ -27,11 +27,15 @@ const styles = {
   },
 };
 
+const LOCATION_SELECTION = 0;
+const DATE_SELECTION = 1;
+const TOOL_SELECTION = 2;
+const SUMMARY = 3;
 @connect(
   state => ({ mapCenter: state.app.mapCenter }),
   dispatch => bindActionCreators({}, dispatch)
 )
-class ResponsiveDialog extends React.Component {
+class Create extends React.Component {
   static propTypes = {
     fullScreen: PropTypes.bool.isRequired,
     history: PropTypes.object,
@@ -46,27 +50,7 @@ class ResponsiveDialog extends React.Component {
     };
   }
 
-  getStepContent = (step) => {
-    const { cleanup } = this.state;
-
-    const commonProps = {
-      cleanup,
-      setCleanup: this.setCleanup,
-    };
-
-    switch (step) {
-      case 0:
-        return <LocationSelection { ...commonProps } />;
-      case 1:
-        return 'Step 2: Tools Required';
-      case 2:
-        return 'Step 3: Summary';
-      default:
-        return 'Unknown step';
-    }
-  }
-
-  setCleanup = (cleanup) => this.setState({ cleanup })
+  setCleanup = cleanup => this.setState({ cleanup })
 
   handleClose = () => {
     // The fadeout transition takes a little while, so pause temporarily to
@@ -91,7 +75,61 @@ class ResponsiveDialog extends React.Component {
     });
   };
 
-  steps = ['Location', 'Tools', 'Confirmation']
+  steps = ['Location', 'Date and Time', 'Tools', 'Summary']
+
+  renderNextButton = () => {
+    const { activeStep, cleanup } = this.state;
+
+    let disabled = false;
+    switch (activeStep) {
+      case LOCATION_SELECTION:
+        if (cleanup.location === null) {
+          disabled = true;
+        }
+        break;
+      case DATE_SELECTION:
+        break;
+      case TOOL_SELECTION:
+        break;
+      case SUMMARY:
+        disabled = true;
+        break;
+      default:
+        disabled = false;
+    }
+    return (
+      <Button
+        disabled={ disabled }
+        color='secondary'
+        onClick={ this.handleNext }
+        variant='raised'
+      >
+        {activeStep === this.steps.length - 1 ? 'Finish' : 'Next'}
+      </Button>
+    );
+  }
+
+  renderStep = () => {
+    const { activeStep, cleanup } = this.state;
+
+    const commonProps = {
+      cleanup,
+      setCleanup: this.setCleanup,
+    };
+
+    switch (activeStep) {
+      case LOCATION_SELECTION:
+        return <LocationSelection { ...commonProps } />;
+      case DATE_SELECTION:
+        return 'Step 2: Select date';
+      case TOOL_SELECTION:
+        return 'Step 3: Select tools';
+      case SUMMARY:
+        return 'Step 4: Summary';
+      default:
+        return 'Unknown step';
+    }
+  }
 
   render() {
     const { fullScreen } = this.props;
@@ -130,7 +168,7 @@ class ResponsiveDialog extends React.Component {
             </div>
           ) : (
             <div style={ styles.stepStyle } >
-              {this.getStepContent(activeStep)}
+              {this.renderStep()}
               <DialogActions>
                 <Button
                   disabled={ activeStep === 0 }
@@ -138,13 +176,7 @@ class ResponsiveDialog extends React.Component {
                 >
                   Back
                 </Button>
-                <Button
-                  variant='raised'
-                  color='secondary'
-                  onClick={ this.handleNext }
-                >
-                  {activeStep === this.steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
+                {this.renderNextButton()}
               </DialogActions>
             </div>
           )}
@@ -159,4 +191,4 @@ class ResponsiveDialog extends React.Component {
   }
 }
 
-export default withRouter(withMobileDialog()(ResponsiveDialog));
+export default withRouter(withMobileDialog()(Create));

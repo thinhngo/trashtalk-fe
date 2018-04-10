@@ -36,7 +36,7 @@ const styles = () => ({
   mapReference: state.app.get('mapReference'),
 }))
 class LocationSelection extends Component {
-  propTypes = {
+  static propTypes = {
     classes: PropTypes.object,
     cleanup: PropTypes.instanceOf(Cleanup),
     mapCenter: PropTypes.instanceOf(Location),
@@ -44,19 +44,46 @@ class LocationSelection extends Component {
     setCleanup: PropTypes.func,
   }
 
-  state = {
-    value: '',
-    locationDetails: null,
-    suggestions: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.cleanup.location ? props.cleanup.location.name : '',
+      selectedLocation: null,
+      suggestions: [],
+    };
+  }
 
   getSuggestionValue = (suggestion) => {
-    this.setState({ locationDetails: suggestion.details });
+    this.setState(
+      { selectedLocation: suggestion.details },
+      () => {
+        const { cleanup } = this.props;
+        const { name, vicinity, geometry } = suggestion.details;
+        this.props.setCleanup(
+          cleanup
+            .set(
+              'location',
+              new Location({
+                latitude: geometry.location.lat(),
+                longitude: geometry.location.lng(),
+                name: `${ name }, ${ vicinity }`,
+              })
+            )
+        );
+      }
+    );
+
     return suggestion.label;
   }
 
   handleSuggestionsFetchRequested = ({ value }) => {
-    const { mapCenter, mapReference } = this.props;
+    const {
+      cleanup,
+      mapCenter,
+      mapReference,
+      setCleanup,
+    } = this.props;
+
     const service = new window.google.maps.places.PlacesService(mapReference);
     // https://developers.google.com/maps/documentation/javascript/places#place_searches
     const request = {
@@ -69,12 +96,17 @@ class LocationSelection extends Component {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         const suggestions = results
           .filter(result => result.vicinity.indexOf('Oakland') >= 0)
-          .slice(0, 4)
-          .map(result => ({ label: result.name, details: result }));
+          .slice(0, 5)
+          .map(result => ({
+            label: `${ result.name }, ${ result.vicinity }`,
+            details: result,
+          }));
 
         this.setState({ suggestions });
       }
     });
+
+    setCleanup(cleanup.set('location', null));
   };
 
   handleSuggestionsClearRequested = () => {
@@ -83,11 +115,7 @@ class LocationSelection extends Component {
     });
   };
 
-  handleChange = (event, { newValue }) => {
-    this.setState({
-      value: newValue,
-    });
-  };
+  handleChange = (event, { newValue }) => this.setState({ value: newValue })
 
   renderInput = (inputProps) => {
     const { classes, ref, ...other } = inputProps;
@@ -95,13 +123,15 @@ class LocationSelection extends Component {
     return (
       <TextField
         fullWidth
-        InputProps={ {
-          inputRef: ref,
-          classes: {
-            input: classes.input,
-          },
-          ...other,
-        } }
+        InputProps={
+          {
+            inputRef: ref,
+            classes: {
+              input: classes.input,
+            },
+            ...other,
+          }
+        }
       />
     );
   }
@@ -140,22 +170,25 @@ class LocationSelection extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const { locationDetails } = this.state;
+    const { classes, cleanup } = this.props;
+    const { selectedLocation } = this.state;
     let mapCenter;
     let locations;
-    if (locationDetails != null) {
+    if (selectedLocation != null) {
       mapCenter = new Location({
-        latitude: locationDetails.geometry.location.lat(),
-        longitude: locationDetails.geometry.location.lng(),
+        latitude: selectedLocation.geometry.location.lat(),
+        longitude: selectedLocation.geometry.location.lng(),
       });
+      locations = [mapCenter];
+    } else if (cleanup.location != null) {
+      mapCenter = new Location(cleanup.location.getLatLngObj());
       locations = [mapCenter];
     }
 
     return (
       <CardContent>
         <div style={ { display: 'flex', flexDirection: 'column' } }>
-          <div style={ { height: '50px', zIndex: 1 } } >
+          <div style={ { height: '50px' } } >
             <Autosuggest
               theme={ {
                 suggestionsList: classes.suggestionsList,
@@ -176,7 +209,7 @@ class LocationSelection extends Component {
                } }
             />
           </div>
-          <div style={ { height: '300px', marginBottom: '1rem', zIndex: 0 } }>
+          <div style={ { height: '300px', zIndex: -1 } }>
             <GoogleMap
               locations={ locations }
               mapCenter={ mapCenter }
