@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { getTools, getToolCategories } from 'actions/tools';
-import Cleanup from '../../models/Cleanup';
+import Cleanup from 'models/Cleanup';
 
 const styles = {
 };
@@ -14,7 +14,7 @@ const styles = {
     cleanups: state.cleanups.get('cleanups'),
     mapCenter: state.app.get('mapCenter'),
   }),
-  dispatch => bindActionCreators({ getTools }, dispatch)
+  dispatch => bindActionCreators({ getTools, getToolCategories }, dispatch)
 )
 export default class ToolSelection extends Component {
   static propTypes = {
@@ -29,7 +29,7 @@ export default class ToolSelection extends Component {
 
   componentWillMount() {
     this.props.getTools();
-    // this.props.getToolCategories();
+    this.props.getToolCategories();
   }
 
   render() {

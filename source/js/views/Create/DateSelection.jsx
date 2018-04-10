@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import TimePicker from 'material-ui-pickers/TimePicker';
 import DatePicker from 'material-ui-pickers/DatePicker';
 
-import Cleanup from '../../models/Cleanup';
+import Cleanup from 'models/Cleanup';
 
 const styles = {
   pickers: {

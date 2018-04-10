@@ -6,6 +6,6 @@ import toolsSagas from 'sagas/tools';
 export default function* rootSaga() {
   yield all([
     ...cleanupSagas,
-    // ...toolsSagas,
+    ...toolsSagas,
   ]);
 }

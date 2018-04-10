@@ -11,18 +11,12 @@ import api from 'api';
 function* getCleanupsStart() {
   try {
     const data = yield call(() => api.getCleanups());
-    const action = { type: GET_CLEANUPS_SUCCESS, data };
-    yield put(action);
+    yield put({ type: GET_CLEANUPS_SUCCESS, data });
   } catch (error) {
-    const action = { type: GET_CLEANUPS_ERROR, error };
-    yield put(action);
+    yield put({ type: GET_CLEANUPS_ERROR, error });
   }
 }
 
-export function* getCleanupsWatcher() {
-  yield takeLatest(GET_CLEANUPS_START, getCleanupsStart);
-}
-
 export default [
-  getCleanupsWatcher(),
+  takeLatest(GET_CLEANUPS_START, getCleanupsStart),
 ];
