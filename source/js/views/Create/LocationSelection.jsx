@@ -48,30 +48,30 @@ class LocationSelection extends Component {
     super(props);
     this.state = {
       value: props.cleanup.location ? props.cleanup.location.name : '',
-      selectedLocation: null,
       suggestions: [],
     };
   }
 
   getSuggestionValue = (suggestion) => {
-    this.setState(
-      { selectedLocation: suggestion.details },
-      () => {
-        const { cleanup } = this.props;
-        const { name, vicinity, geometry } = suggestion.details;
-        this.props.setCleanup(
-          cleanup
-            .set(
-              'location',
-              new Location({
-                latitude: geometry.location.lat(),
-                longitude: geometry.location.lng(),
-                name: `${ name }, ${ vicinity }`,
-              })
-            )
-        );
-      }
+    // Before we return the suggestion value, save the selected location
+    // to the cleanup object
+    const { cleanup, mapReference } = this.props;
+    const { name, vicinity, geometry } = suggestion.details;
+    const newLocation = new Location({
+      latitude: geometry.location.lat(),
+      longitude: geometry.location.lng(),
+      name: `${ name }, ${ vicinity }`,
+    });
+
+    this.props.setCleanup(
+      cleanup.set(
+        'location',
+        newLocation
+      )
     );
+
+    // Also set the background map to the same location
+    mapReference.setCenter(newLocation.getLatLngObj());
 
     return suggestion.label;
   }
@@ -171,24 +171,17 @@ class LocationSelection extends Component {
 
   render() {
     const { classes, cleanup } = this.props;
-    const { selectedLocation } = this.state;
     let mapCenter;
     let locations;
-    if (selectedLocation != null) {
-      mapCenter = new Location({
-        latitude: selectedLocation.geometry.location.lat(),
-        longitude: selectedLocation.geometry.location.lng(),
-      });
-      locations = [mapCenter];
-    } else if (cleanup.location != null) {
-      mapCenter = new Location(cleanup.location.getLatLngObj());
+    if (cleanup.location != null) {
+      mapCenter = cleanup.location;
       locations = [mapCenter];
     }
 
     return (
       <CardContent>
         <div style={ { display: 'flex', flexDirection: 'column' } }>
-          <div style={ { height: '50px' } } >
+          <div style={ { height: '50px', zIndex: 1 } } >
             <Autosuggest
               theme={ {
                 suggestionsList: classes.suggestionsList,
@@ -209,7 +202,7 @@ class LocationSelection extends Component {
                } }
             />
           </div>
-          <div style={ { height: '300px', zIndex: -1 } }>
+          <div style={ { height: '300px', zIndex: 0 } }>
             <GoogleMap
               locations={ locations }
               mapCenter={ mapCenter }

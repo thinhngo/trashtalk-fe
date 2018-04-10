@@ -19,11 +19,13 @@ export default class GoogleMap extends Component {
     locations: PropTypes.arrayOf(Location),
     mapCenter: PropTypes.instanceOf(Location),
     setMapReference: PropTypes.func,
+    zoom: PropTypes.number,
   }
 
   static defaultProps = {
     locations: [],
     mapCenter: new Location(), // New Location objects default to middle of Oakland
+    zoom: 17
   }
 
   state = {
@@ -38,13 +40,15 @@ export default class GoogleMap extends Component {
    */
   componentDidMount() {
     const { id } = this.state;
-    const { locations, mapCenter, setMapReference } = this.props;
+    const {
+      locations, mapCenter, setMapReference, zoom,
+    } = this.props;
 
     // Initialize Google Map object using mapCenter inside mapContainer
     // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
     const mapReference = new window.google.maps.Map(document.getElementById(id), {
-      zoom: 17,
       center: { lat: mapCenter.latitude, lng: mapCenter.longitude },
+      zoom,
     });
 
     window.mapReference = mapReference;

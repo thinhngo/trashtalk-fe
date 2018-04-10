@@ -32,13 +32,16 @@ const DATE_SELECTION = 1;
 const TOOL_SELECTION = 2;
 const SUMMARY = 3;
 @connect(
-  state => ({ mapCenter: state.app.mapCenter }),
+  state => ({
+    mapReference: state.app.mapReference,
+  }),
   dispatch => bindActionCreators({}, dispatch)
 )
 class Create extends React.Component {
   static propTypes = {
     fullScreen: PropTypes.bool.isRequired,
     history: PropTypes.object,
+    mapReference: PropTypes.object,
   }
 
   constructor(props) {
@@ -77,29 +80,37 @@ class Create extends React.Component {
 
   steps = ['Location', 'Date and Time', 'Tools', 'Summary']
 
+  renderContentText = () => {
+    const { activeStep } = this.state;
+    const stepMapping = {
+      [LOCATION_SELECTION]: 'Enter a location',
+      [DATE_SELECTION]: 'Choose a date and time',
+      [TOOL_SELECTION]: 'Choose the tools necessary for this clenaup',
+      [SUMMARY]: 'Summary',
+    };
+
+    return (
+      <DialogContentText>
+        { stepMapping[activeStep] }
+      </DialogContentText>
+    );
+  }
+
   renderNextButton = () => {
     const { activeStep, cleanup } = this.state;
 
-    let disabled = false;
-    switch (activeStep) {
-      case LOCATION_SELECTION:
-        if (cleanup.location === null) {
-          disabled = true;
-        }
-        break;
-      case DATE_SELECTION:
-        break;
-      case TOOL_SELECTION:
-        break;
-      case SUMMARY:
-        disabled = true;
-        break;
-      default:
-        disabled = false;
-    }
+    const stepMapping = {
+      [LOCATION_SELECTION]: {
+        disabled: cleanup.location == null,
+      },
+      [DATE_SELECTION]: {},
+      [TOOL_SELECTION]: {},
+      [SUMMARY]: {},
+    };
+
     return (
       <Button
-        disabled={ disabled }
+        disabled={ stepMapping[activeStep].disabled }
         color='secondary'
         onClick={ this.handleNext }
         variant='raised'
@@ -110,25 +121,22 @@ class Create extends React.Component {
   }
 
   renderStep = () => {
-    const { activeStep, cleanup } = this.state;
+    const { activeStep, cleanup, mapReference } = this.state;
+    const commonProps = { cleanup, setCleanup: this.setCleanup };
 
-    const commonProps = {
-      cleanup,
-      setCleanup: this.setCleanup,
+    const stepMapping = {
+      [LOCATION_SELECTION]: (
+        <LocationSelection
+          { ...commonProps }
+          mapReference={ mapReference }
+        />
+      ),
+      [DATE_SELECTION]: 'Step 2: Select date',
+      [TOOL_SELECTION]: 'Step 3: Select tools',
+      [SUMMARY]: 'Step 4: Summary',
     };
 
-    switch (activeStep) {
-      case LOCATION_SELECTION:
-        return <LocationSelection { ...commonProps } />;
-      case DATE_SELECTION:
-        return 'Step 2: Select date';
-      case TOOL_SELECTION:
-        return 'Step 3: Select tools';
-      case SUMMARY:
-        return 'Step 4: Summary';
-      default:
-        return 'Unknown step';
-    }
+    return stepMapping[activeStep];
   }
 
   render() {
@@ -144,9 +152,7 @@ class Create extends React.Component {
       >
         <DialogTitle>Organize a New Cleanup</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Organize a new cleanup!
-          </DialogContentText>
+          {this.renderContentText()}
           <Stepper
             activeStep={ activeStep }
             alternativeLabel
