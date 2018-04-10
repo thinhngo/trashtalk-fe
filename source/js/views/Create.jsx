@@ -16,7 +16,9 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import { routeCodes } from '../constants/routes';
 
+import DateSelection from './Create/DateSelection';
 import LocationSelection from './Create/LocationSelection';
+import ToolSelection from './Create/ToolSelection';
 
 import Cleanup from '../models/Cleanup';
 
@@ -32,9 +34,7 @@ const DATE_SELECTION = 1;
 const TOOL_SELECTION = 2;
 const SUMMARY = 3;
 @connect(
-  state => ({
-    mapReference: state.app.mapReference,
-  }),
+  null,
   dispatch => bindActionCreators({}, dispatch)
 )
 class Create extends React.Component {
@@ -83,9 +83,9 @@ class Create extends React.Component {
   renderContentText = () => {
     const { activeStep } = this.state;
     const stepMapping = {
-      [LOCATION_SELECTION]: 'Enter a location',
-      [DATE_SELECTION]: 'Choose a date and time',
-      [TOOL_SELECTION]: 'Choose the tools necessary for this clenaup',
+      [LOCATION_SELECTION]: 'Where is this cleanup located?',
+      [DATE_SELECTION]: 'When does it start and end?',
+      [TOOL_SELECTION]: 'What tools are required?',
       [SUMMARY]: 'Summary',
     };
 
@@ -104,7 +104,7 @@ class Create extends React.Component {
         disabled: cleanup.location == null,
       },
       [DATE_SELECTION]: {
-        disabled: cleanup.date == null || cleanup.time == null,
+        disabled: !cleanup.timesAreValid(),
       },
       [TOOL_SELECTION]: {},
       [SUMMARY]: {},
@@ -123,18 +123,13 @@ class Create extends React.Component {
   }
 
   renderStep = () => {
-    const { activeStep, cleanup, mapReference } = this.state;
+    const { activeStep, cleanup } = this.state;
     const commonProps = { cleanup, setCleanup: this.setCleanup };
 
     const stepMapping = {
-      [LOCATION_SELECTION]: (
-        <LocationSelection
-          { ...commonProps }
-          mapReference={ mapReference }
-        />
-      ),
-      [DATE_SELECTION]: 'Step 2: Select date',
-      [TOOL_SELECTION]: 'Step 3: Select tools',
+      [LOCATION_SELECTION]: <LocationSelection { ...commonProps } />,
+      [DATE_SELECTION]: <DateSelection { ...commonProps } />,
+      [TOOL_SELECTION]: <ToolSelection { ...commonProps } />,
       [SUMMARY]: 'Step 4: Summary',
     };
 

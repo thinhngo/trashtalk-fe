@@ -4,7 +4,15 @@ export default class Cleanup extends Record({
   id: undefined,
   location: null,
   organizer: null,
-  date: null,
+  startTime: null,
+  endTime: null,
   time: null,
 }) {
+  timesAreValid() {
+    return (
+      (this.startTime != null && this.endTime != null) &&
+      this.startTime > Date.now() &&
+      this.endTime > this.startTime
+    );
+  }
 }
