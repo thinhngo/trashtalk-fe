@@ -103,7 +103,9 @@ class Create extends React.Component {
       [LOCATION_SELECTION]: {
         disabled: cleanup.location == null,
       },
-      [DATE_SELECTION]: {},
+      [DATE_SELECTION]: {
+        disabled: cleanup.date == null || cleanup.time == null,
+      },
       [TOOL_SELECTION]: {},
       [SUMMARY]: {},
     };
