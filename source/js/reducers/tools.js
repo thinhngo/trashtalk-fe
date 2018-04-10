@@ -7,9 +7,10 @@ import {
   GET_TOOL_CATEGORIES_START,
   GET_TOOL_CATEGORIES_ERROR,
   GET_TOOL_CATEGORIES_SUCCESS,
-} from 'actions/cleanups';
+} from 'actions/tools';
 
-import { Tool, ToolCategory } from 'models';
+import ToolCategory from 'models/ToolCategory';
+import Tool from 'models/Tool';
 
 const initialState = Map({
   loading: false,
@@ -33,9 +34,10 @@ const actionsMap = {
     }));
   },
   [GET_TOOLS_SUCCESS]: (state, action) => {
+    console.debug('GET_TOOLS_SUCCESS');
     return state.merge(Map({
       loading: false,
-      cleanups: action.data.map(o => new Tool(o)),
+      tools: action.data.map(o => new Tool(o)),
     }));
   },
   // Async action
@@ -54,7 +56,7 @@ const actionsMap = {
   [GET_TOOL_CATEGORIES_SUCCESS]: (state, action) => {
     return state.merge(Map({
       loading: false,
-      cleanups: action.data.map(o => new ToolCategory(o)),
+      toolCategories: action.data.map(o => new ToolCategory(o)),
     }));
   },
 };
