@@ -29,12 +29,12 @@ const styles = {
   },
 };
 
-const LOCATION_SELECTION = 0;
+const LOCATION_SELECTION = 2;
 const DATE_SELECTION = 1;
-const TOOL_SELECTION = 2;
+const TOOL_SELECTION = 0;
 const SUMMARY = 3;
 @connect(
-  null,
+  () => ({}),
   dispatch => bindActionCreators({}, dispatch)
 )
 class Create extends React.Component {

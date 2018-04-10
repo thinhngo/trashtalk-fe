@@ -25,7 +25,6 @@ export default class ConnectedComponent extends Component {
 
   constructor(props) {
     super(props);
-
     const { startTime, endTime } = props.cleanup;
 
     this.state = {
@@ -39,7 +38,14 @@ export default class ConnectedComponent extends Component {
     endTime: null,
   }
 
-  handleDateChange = (date) => this.setState({ endTime: date, startTime: date })
+  handleDateChange = (date) => {
+    const { cleanup, setCleanup } = this.props;
+    this.setState({ endTime: date, startTime: date });
+
+    setCleanup(cleanup
+      .set('startTime', date)
+      .set('endTime', date));
+  }
 
   handleStartChange = (date) => {
     const { cleanup, setCleanup } = this.props;
@@ -76,6 +82,7 @@ export default class ConnectedComponent extends Component {
             <DatePicker
               autoOk={ true }
               disablePast={ true }
+              minDateMessage='Choose a day after today'
               value={ startTime }
               onChange={ this.handleDateChange }
             />.

@@ -8,7 +8,7 @@ import GoogleMap from 'components/GoogleMap';
 import { getCleanups } from 'actions/cleanups';
 import { setMapReference } from 'actions/app';
 
-import Cleanup from 'models/Cleanup';
+import { Cleanup, Location } from 'models';
 
 const styles = {
   container: {
@@ -23,15 +23,15 @@ const styles = {
 @connect(
   state => ({
     cleanups: state.cleanups.get('cleanups'),
-    mapCenter: state.app.mapCenter,
+    mapCenter: state.app.get('mapCenter'),
   }),
   dispatch => bindActionCreators({ getCleanups, setMapReference }, dispatch)
 )
-export default class Home extends Component {
+export default class MapBackground extends Component {
   static propTypes = {
-    cleanups: PropTypes.arrayOf(Cleanup),
+    cleanups: PropTypes.array,
     getCleanups: PropTypes.func,
-    mapCenter: PropTypes.instanceOf(Location),
+    mapCenter: PropTypes.object,
     setMapReference: PropTypes.func,
   }
 

@@ -10,19 +10,19 @@ import NotFound from 'views/NotFound';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { createMuiTheme } from 'material-ui/styles';
-import MapLayer from '../components/global/MapLayer';
+import MapBackground from '../components/global/MapBackground';
 
 class App extends Component {
   render() {
     return (
       <MuiThemeProvider theme={ createMuiTheme(themes.greens2) } >
-        <MapLayer />
+        <MapBackground />
         <div style={ { zIndex: -1 } }> <Menu /> </div>
         <div style={ { zIndex: 1 } }>
           <Switch>
-            <Route exact path={routeCodes.NEW_CLEANUP} component={Create} />
-            <Route path={routeCodes.HOME} />
-            <Route path='*' component={NotFound} />
+            <Route exact path={ routeCodes.NEW_CLEANUP } component={Create} />
+            <Route path={ routeCodes.HOME } />
+            <Route path='*' component={ NotFound } />
           </Switch>
         </div>
       </MuiThemeProvider>

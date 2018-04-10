@@ -14,10 +14,12 @@ const styles = {
   },
 };
 
+const DEFAULT_ZOOM = 17;
+
 export default class GoogleMap extends Component {
   static propTypes = {
-    locations: PropTypes.arrayOf(Location),
-    mapCenter: PropTypes.instanceOf(Location),
+    locations: PropTypes.array,
+    mapCenter: PropTypes.object,
     setMapReference: PropTypes.func,
     zoom: PropTypes.number,
   }
@@ -25,7 +27,7 @@ export default class GoogleMap extends Component {
   static defaultProps = {
     locations: [],
     mapCenter: new Location(), // New Location objects default to middle of Oakland
-    zoom: 17
+    zoom: DEFAULT_ZOOM,
   }
 
   state = {
@@ -50,8 +52,6 @@ export default class GoogleMap extends Component {
       center: { lat: mapCenter.latitude, lng: mapCenter.longitude },
       zoom,
     });
-
-    window.mapReference = mapReference;
 
     this.setState( // eslint-disable-line react/no-did-mount-set-state
       { mapReference },

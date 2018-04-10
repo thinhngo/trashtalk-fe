@@ -14,7 +14,6 @@ const initialState = Map({
   error: null,
   cleanups: [],
   currentCleanup: null,
-  userLocation: new Location(),
 });
 
 const actionsMap = {
