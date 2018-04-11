@@ -191,9 +191,6 @@ class ToolsSelector extends Component {
               id: 'tool',
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
             {
               (categoryToToolMap[currentToolSelection.categoryId] || []).map( toolId => {
                 const tool = tools[toolId];

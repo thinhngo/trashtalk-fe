@@ -29,9 +29,9 @@ const styles = {
   },
 };
 
-const LOCATION_SELECTION = 2;
+const LOCATION_SELECTION = 0;
 const DATE_SELECTION = 1;
-const TOOL_SELECTION = 0;
+const TOOL_SELECTION = 2;
 const SUMMARY = 3;
 @connect(
   () => ({}),
