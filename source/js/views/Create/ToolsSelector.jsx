@@ -12,11 +12,16 @@ import Select from 'material-ui/Select';
 import Add from '@material-ui/icons/Add';
 import Divider from 'material-ui/Divider';
 import { List } from 'immutable';
+import Typography from 'material-ui/Typography';
+import Avatar from 'material-ui/Avatar';
 
 import { getTools, getToolCategories } from 'actions/tools';
 import ToolSelection from 'models/ToolSelection';
 
 const styles = theme => ({
+  avatar: {
+    margin: 10,
+  },
   root: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -213,6 +218,21 @@ class ToolsSelector extends Component {
             margin='normal'
           />
         </FormControl>
+        { currentToolSelection.toolId !== '' && (
+          <div>
+            <Typography variant="caption" gutterBottom>
+              {
+                tools[currentToolSelection.toolId].description
+              }
+            </Typography>
+            <Avatar
+              alt='Tool image'
+              src={
+                `http://localhost:8000/assets/${tools[currentToolSelection.toolId].image_static_location}`
+              }
+            />
+          </div>
+        )}
         <Divider style={{marginTop: '2rem'}} />
       </div>
     )
